@@ -1,5 +1,6 @@
 const File = require("../models/File");
 const Repository = require("../models/repoModel");
+const Commit = require("../models/commitModel");
 
 const createFile = async (req, res) => {
     try {
@@ -39,6 +40,14 @@ const createFile = async (req, res) => {
             name,
             content,
             createdBy: userId
+        });
+
+        await Commit.create({
+            repo: repoId,
+            author: userId,
+            message: req.body.commitMessage,
+            action: "ADD",
+            fileName: name
         });
 
         res.status(201).json(file);
@@ -115,10 +124,18 @@ const deleteFile = async (req, res) => {
       });
     }
 
+    await Commit.create({
+        repo: repo._id,
+        author: userId,
+        message: req.body.commitMessage,
+        action: "DELETE",
+        fileName: file.name
+    });
+
     await File.findByIdAndDelete(fileId);
 
     res.json({
-      message: "File deleted successfully"
+        message: "File deleted successfully"
     });
 
   } catch (err) {

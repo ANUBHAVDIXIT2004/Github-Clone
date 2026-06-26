@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const Repository = require("../models/repoModel");
 const User = require("../models/userModel");
 const Issue = require("../models/issueModel");
+const Commit = require("../models/commitModel");
 
 async function createRepository(req, res) {
   const { owner, name, issues, content, description, visibility } = req.body;
@@ -46,13 +47,32 @@ async function createRepository(req, res) {
 
 async function getAllRepositories(req, res) {
   try {
+
     const repositories = await Repository.find({})
       .populate("owner")
       .populate("issues");
 
-    res.json(repositories);
+    const repos = await Promise.all(
+
+      repositories.map(async (repo) => {
+
+        const lastCommit = await Commit.findOne({
+          repo: repo._id
+        }).sort({ createdAt: -1 });
+
+        return {
+          ...repo.toObject(),
+          lastCommitTime: lastCommit ? lastCommit.createdAt : null
+        };
+
+      })
+
+    );
+
+    res.json(repos);
+
   } catch (err) {
-    console.error("Error during fetching repositories : ", err.message);
+    console.error(err);
     res.status(500).send("Server error");
   }
 }
@@ -94,21 +114,45 @@ async function fetchRepositoryByName(req, res) {
 }
 
 async function fetchRepositoriesForCurrentUser(req, res) {
-  console.log(req.params);
+
   const { userID } = req.params;
 
   try {
-    const repositories = await Repository.find({ owner: userID });
 
-    if (!repositories || repositories.length == 0) {
-      return res.status(404).json({ error: "User Repositories not found!" });
-    }
-    console.log(repositories);
-    res.json({ message: "Repositories found!", repositories });
+    const repositories = await Repository.find({
+      owner: userID
+    });
+
+    const repos = await Promise.all(
+
+      repositories.map(async (repo) => {
+
+        const lastCommit = await Commit.findOne({
+          repo: repo._id
+        }).sort({ createdAt: -1 });
+
+        return {
+          ...repo.toObject(),
+          lastCommitTime: lastCommit ? lastCommit.createdAt : null
+        };
+
+      })
+
+    );
+
+    res.json({
+      message: "Repositories found!",
+      repositories: repos
+    });
+
   } catch (err) {
-    console.error("Error during fetching user repositories : ", err.message);
+
+    console.error(err);
+
     res.status(500).send("Server error");
+
   }
+
 }
 
 async function updateRepositoryById(req, res) {
