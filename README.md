@@ -286,6 +286,3 @@ AWS credentials should be configured via the AWS CLI or environment variables (`
 
 ---
 
-## 📄 License
-
-This project is licensed under the ISC License.
