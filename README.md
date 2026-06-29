@@ -5,7 +5,13 @@ A full-stack code hosting platform with a custom-built version control engine, A
 > Built with React, Node.js/Express, MongoDB, AWS S3, Google Gemini, and Socket.io.
 
 ---
+## 🌐 Live Demo
 
+**Application:** https://collaborative-repository-platform-t.vercel.app/
+
+> Try creating an account, creating repositories, committing changes, opening pull requests, starring repositories, and exploring the AI-powered features.
+
+---
 ## What This Project Does
 
 Most developers build CRUD apps. This project goes a layer deeper — implementing the core primitives of a version control system (staging, commits, snapshots, revert, remote push/pull) alongside a full web platform for hosting and collaborating on code.
