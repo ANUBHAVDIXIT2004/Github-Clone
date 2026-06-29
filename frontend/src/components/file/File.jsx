@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { reviewCode } from "../../api/ai";
+import BASE_URL from '../../config.js';
 const File = () => {
   const { fileId } = useParams();
 
@@ -20,7 +21,7 @@ const [review, setReview] = useState("");
 
   const loadFile = async () => {
     try {
-      const response = await fetch(`http://localhost:3002/file/view/${fileId}`);
+      const response = await fetch(`${BASE_URL}/file/view/${fileId}`);
       const data = await response.json();
       setFile(data);
       setContent(data.content);
@@ -75,7 +76,7 @@ const res = await reviewCode(
 
       const response = await fetch(
 
-        `http://localhost:3002/file/edit/${fileId}`,
+        `${BASE_URL}/file/edit/${fileId}`,
 
         {
 

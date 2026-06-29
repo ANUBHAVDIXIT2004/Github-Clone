@@ -3,7 +3,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import "./dashboard.css";
 import Navbar from "../Navbar";
 import { formatDistanceToNow } from "date-fns";
-
+import BASE_URL from '../../config.js';
 const Dashboard = () => {
   const navigate = useNavigate();
 
@@ -20,7 +20,7 @@ const Dashboard = () => {
     const fetchRepositories = async () => {
       try {
         const response = await fetch(
-          `http://localhost:3002/repo/user/${userId}`
+          `${BASE_URL}/repo/user/${userId}`
         );
 
         const data = await response.json();
@@ -36,7 +36,7 @@ const Dashboard = () => {
 
     const fetchSuggestedRepositories = async () => {
       try {
-        const response = await fetch("http://localhost:3002/repo/all");
+        const response = await fetch(`${BASE_URL}/repo/all`);
 
         const data = await response.json();
 

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./createRepo.css";
+import BASE_URL from '../../config.js';
 function CreateRepository() {
 
     const navigate = useNavigate();
@@ -15,7 +16,7 @@ function CreateRepository() {
 
         const owner=localStorage.getItem("userId");
 
-        const response=await fetch("http://localhost:3002/repo/create",{
+        const response=await fetch(`${BASE_URL}/repo/create`,{
 
             method:"POST",
 

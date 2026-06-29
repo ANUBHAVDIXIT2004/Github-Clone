@@ -1,5 +1,5 @@
 import axios from "axios";
-
+import BASE_URL from '../../config.js';
 const API = axios.create({
 
     baseURL: import.meta.env.VITE_API_URL,
@@ -58,7 +58,7 @@ export const generateReadme = async (repoId, userId) => {
 
 };
 export const askRepoAssistant = async (repoId, question) => {
-  const response = await fetch('http://localhost:3002/ai/repo-assistant', {
+  const response = await fetch(`${BASE_URL}/ai/repo-assistant`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ repoId, question })

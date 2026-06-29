@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import "./repository.css";
 import { askRepoAssistant } from '../../api/ai.js';
+import BASE_URL from '../../config.js';
 const Repository = () => {
   const { repoId } = useParams();
   const navigate = useNavigate();
@@ -38,7 +39,7 @@ const Repository = () => {
 
   const loadRepository = async () => {
     try {
-      const response = await fetch(`http://localhost:3002/repo/${repoId}`);
+      const response = await fetch(`${BASE_URL}/repo/${repoId}`);
       const data = await response.json();
 
       console.log("Repository API:", data);
@@ -56,7 +57,7 @@ const Repository = () => {
 
   const loadFiles = async () => {
     try {
-      const response = await fetch(`http://localhost:3002/file/${repoId}`);
+      const response = await fetch(`${BASE_URL}/file/${repoId}`);
       const data = await response.json();
 
       if (Array.isArray(data)) {
@@ -78,7 +79,7 @@ const Repository = () => {
     try {
 
       const response = await fetch(
-        `http://localhost:3002/commit/${repoId}`
+        `${BASE_URL}/commit/${repoId}`
       );
 
       const data = await response.json();
@@ -92,7 +93,7 @@ const Repository = () => {
   const checkStar = async () => {
     try {
       const response = await fetch(
-        `http://localhost:3002/starred/${currentUser}`
+        `${BASE_URL}/starred/${currentUser}`
       );
 
       const data = await response.json();
@@ -112,7 +113,7 @@ const Repository = () => {
       setAiLoading(true);
 
       const response = await fetch(
-        "http://localhost:3002/ai/commit-message",
+        "${BASE_URL}/ai/commit-message",
         {
           method: "POST",
           headers: {
@@ -159,7 +160,7 @@ const Repository = () => {
       setReadmeLoading(true);
 
       const response = await fetch(
-        "http://localhost:3002/ai/generate-readme",
+        "${BASE_URL}/ai/generate-readme",
         {
           method: "POST",
           headers: {
@@ -220,7 +221,7 @@ const Repository = () => {
     try {
 
       const response = await fetch(
-        "http://localhost:3002/file/create",
+        "${BASE_URL}/file/create",
         {
           method: "POST",
           headers: {
@@ -265,7 +266,7 @@ const Repository = () => {
     try {
 
       const response = await fetch(
-        "http://localhost:3002/star",
+        "${BASE_URL}/star",
         {
           method: "POST",
           headers: {
@@ -306,7 +307,7 @@ const Repository = () => {
     try {
 
       const response = await fetch(
-        `http://localhost:3002/repo/delete/${repoId}`,
+        `${BASE_URL}/repo/delete/${repoId}`,
         {
           method: "DELETE",
           headers: {
@@ -340,7 +341,7 @@ const Repository = () => {
 
       const response = await fetch(
 
-        `http://localhost:3002/repo/copy/${repoId}`,
+        `${BASE_URL}/repo/copy/${repoId}`,
 
         {
 
@@ -392,7 +393,7 @@ const Repository = () => {
     try {
 
       const response = await fetch(
-        `http://localhost:3002/file/${file._id}`,
+        `${BASE_URL}/file/${file._id}`,
         {
           method: "DELETE",
           headers: {
@@ -432,7 +433,7 @@ const Repository = () => {
     try {
 
       const response = await fetch(
-        `http://localhost:3002/commit/reset/${commitId}`,
+        `${BASE_URL}/commit/reset/${commitId}`,
         {
           method: "POST",
           headers: {
@@ -467,7 +468,7 @@ const Repository = () => {
   };
   const loadPRs = async () => {
     try {
-      const response = await fetch(`http://localhost:3002/pr/${repoId}`);
+      const response = await fetch(`${BASE_URL}/pr/${repoId}`);
       const data = await response.json();
       setPullRequests(data);
     } catch (err) {
@@ -478,7 +479,7 @@ const Repository = () => {
   const handleCreatePR = async () => {
     if (!prTitle.trim()) return alert("Title is required");
     try {
-      const response = await fetch("http://localhost:3002/pr/create", {
+      const response = await fetch("${BASE_URL}/pr/create", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -504,7 +505,7 @@ const Repository = () => {
     const confirm = window.confirm("Merge this pull request?");
     if (!confirm) return;
     try {
-      const response = await fetch(`http://localhost:3002/pr/merge/${prId}`, {
+      const response = await fetch(`${BASE_URL}/pr/merge/${prId}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ userId: currentUser }),
@@ -522,7 +523,7 @@ const Repository = () => {
 
   const handleClosePR = async (prId) => {
     try {
-      await fetch(`http://localhost:3002/pr/close/${prId}`, {
+      await fetch(`${BASE_URL}/pr/close/${prId}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
       });

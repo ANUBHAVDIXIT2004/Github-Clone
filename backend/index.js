@@ -82,9 +82,12 @@ function startServer() {
 
   app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: [
+      "http://localhost:5173",
+      "https://your-app.vercel.app"  // replace with your actual Vercel URL after deploying
+    ],
     credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE"],
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
   })
 );
 
