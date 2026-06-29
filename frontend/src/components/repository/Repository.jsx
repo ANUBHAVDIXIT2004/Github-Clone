@@ -113,7 +113,7 @@ const Repository = () => {
       setAiLoading(true);
 
       const response = await fetch(
-        "${BASE_URL}/ai/commit-message",
+        `${BASE_URL}/ai/commit-message`,
         {
           method: "POST",
           headers: {
@@ -160,7 +160,7 @@ const Repository = () => {
       setReadmeLoading(true);
 
       const response = await fetch(
-        "${BASE_URL}/ai/generate-readme",
+        `${BASE_URL}/ai/generate-readme`,
         {
           method: "POST",
           headers: {
@@ -221,7 +221,7 @@ const Repository = () => {
     try {
 
       const response = await fetch(
-        "${BASE_URL}/file/create",
+        `${BASE_URL}/file/create`,
         {
           method: "POST",
           headers: {
@@ -266,7 +266,7 @@ const Repository = () => {
     try {
 
       const response = await fetch(
-        "${BASE_URL}/star",
+        `${BASE_URL}/star`,
         {
           method: "POST",
           headers: {
@@ -479,7 +479,7 @@ const Repository = () => {
   const handleCreatePR = async () => {
     if (!prTitle.trim()) return alert("Title is required");
     try {
-      const response = await fetch("${BASE_URL}/pr/create", {
+      const response = await fetch(`${BASE_URL}/pr/create`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
