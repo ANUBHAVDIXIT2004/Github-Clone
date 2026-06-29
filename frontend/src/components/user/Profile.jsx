@@ -86,12 +86,13 @@ const Profile = () => {
 
           <button
               className="logoutBtn"
-              onClick={() => {
-                  localStorage.removeItem("token");
-                  localStorage.removeItem("userId");
-                  setCurrentUser(null);
-                  window.location.href="/auth";
-              }}
+              // ✅ fix
+onClick={() => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("userId");
+    setCurrentUser(null);
+    navigate("/auth");
+}}
           >
               Logout
           </button>
