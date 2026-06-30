@@ -15,7 +15,17 @@ const createPR = async (req, res) => {
       toRepo,
       author: userId,
     });
+    // Find the owner of the target repo
+    const targetRepo = await Repository.findById(toRepo);
 
+    // Emit notification to the repo owner's room
+    if (global.io && targetRepo) {
+      global.io.to(targetRepo.owner.toString()).emit("newPR", {
+        message: `New pull request: "${title}"`,
+        repoId: toRepo,
+        prId: pr._id,
+      });
+    }
     res.status(201).json({ success: true, pr });
   } catch (err) {
     console.error(err);

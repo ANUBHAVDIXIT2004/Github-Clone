@@ -4,6 +4,7 @@ import "./dashboard.css";
 import Navbar from "../Navbar";
 import { formatDistanceToNow } from "date-fns";
 import BASE_URL from '../../config.js';
+import socket from '../../socket.js';
 const Dashboard = () => {
   const navigate = useNavigate();
 
@@ -13,7 +14,8 @@ const Dashboard = () => {
   const [repositories, setRepositories] = useState([]);
   const [suggestedRepositories, setSuggestedRepositories] = useState([]);
   const [searchResults, setSearchResults] = useState([]);
-
+  const [notifications, setNotifications] = useState([]);
+  const currentUser = localStorage.getItem("userId");
   useEffect(() => {
     const userId = localStorage.getItem("userId");
 
@@ -60,7 +62,20 @@ const Dashboard = () => {
     fetchRepositories();
     fetchSuggestedRepositories();
   }, []);
+  useEffect(() => {
+  if (!currentUser) return;
 
+  socket.emit("joinRoom", currentUser);
+
+  socket.on("newPR", (data) => {
+    setNotifications(prev => [data, ...prev]);
+    alert(data.message);
+  });
+
+  return () => {
+    socket.off("newPR");
+  };
+}, [currentUser]);
   useEffect(() => {
     setSearchResults(
       repositories.filter((repo) =>
@@ -72,7 +87,16 @@ const Dashboard = () => {
   return (
     <>
       <Navbar />
-
+      {notifications.length > 0 && (
+  <div className="chat-box" style={{ marginBottom: "20px" }}>
+    <h3 style={{ color: "#e6edf3" }}>🔔 Notifications</h3>
+    {notifications.map((n, i) => (
+      <div key={i} className="commitRow">
+        <div className="commitMessage">{n.message}</div>
+      </div>
+    ))}
+  </div>
+)}
       <div className="dashboard">
         {/* LEFT SIDE */}
         <div className="left">

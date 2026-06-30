@@ -102,7 +102,7 @@ function startServer() {
     methods: ["GET", "POST"],
   },
 });
-
+global.io = io;
   io.on("connection", (socket) => {
     socket.on("joinRoom", (userID) => {
       user = userID;
